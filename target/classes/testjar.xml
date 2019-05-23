@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+
+    <bean id="car" class="jar.Car">
+        <property name="name" value="autotooo"></property>
+        <property name="price" value="100"></property>
+    </bean>
+
+</beans>
