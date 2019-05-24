@@ -7,7 +7,7 @@ import com.sonihr.beans.annotation.Service;
 import com.sonihr.beans.annotation.Value;
 
 @Service
-public class Person {
+public class PersonService {
     @Value("黄大宁的第一次注入")
     private String name;
 
@@ -21,7 +21,7 @@ public class Person {
 
     @Override
     public String toString() {
-        return "Person{" +
+        return "PersonService{" +
                 "name='" + name + '\'' +
                 '}';
     }

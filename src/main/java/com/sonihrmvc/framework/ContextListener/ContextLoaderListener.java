@@ -5,7 +5,7 @@ package com.sonihrmvc.framework.ContextListener;/*
 
 import com.sonihr.context.ApplicationContext;
 import com.sonihr.context.ClassPathXmlApplicationContext;
-import com.sonihrmvc.webappProject.service.Person;
+import com.sonihrmvc.webappProject.service.PersonService;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -22,8 +22,9 @@ public class ContextLoaderListener implements ServletContextListener {
         ApplicationContext applicationContext = null;
         try {
             applicationContext = new ClassPathXmlApplicationContext(springXmlPath);
-            Person person = (Person) applicationContext.getBean("person");
-            System.out.println(person);
+            servletContext.setAttribute("springContext",applicationContext);
+//            PersonService personService = (PersonService) applicationContext.getBean("personService");
+//            System.out.println(personService);
         } catch (Exception e) {
             e.printStackTrace();
         }
