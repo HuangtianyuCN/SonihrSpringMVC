@@ -15,45 +15,27 @@ import java.lang.reflect.Method;
 import java.sql.ResultSet;
 import java.util.*;
 
-public class AnnotationHandlerMapping implements HandlerMapping{
-    private ApplicationContext mvcContext;
-    private HashMap<String,RequestMappingHandler> handlerRegistry;
-    public AnnotationHandlerMapping(ApplicationContext mvcContext) {
-        this.mvcContext = mvcContext;
-        this.handlerRegistry = new HashMap<>();
-        init();
-    }
-
-    public ApplicationContext getMvcContext() {
-        return mvcContext;
-    }
-
-    public void setMvcContext(ApplicationContext mvcContext) {
-        this.mvcContext = mvcContext;
-    }
-
-    public HashMap<String, RequestMappingHandler> getHandlerRegistry() {
-        return handlerRegistry;
-    }
-
-    public void setHandlerRegistry(HashMap<String, RequestMappingHandler> handlerRegistry) {
-        this.handlerRegistry = handlerRegistry;
-    }
-
-
-    @Override
-    public HandlerExecutionChain getHandler(HttpServletRequest request) throws Exception {
-
-        HandlerExecutionChain handlerExecutionChain = new HandlerExecutionChain();
-        //System.out.println("uri = "+request.getRequestURI());
-        RequestMappingHandler handler = handlerRegistry.get(request.getRequestURI());
-        //System.out.println("handler = "+handler);
-        handlerExecutionChain.setHandler(handler);
-        return handlerExecutionChain;
+public class AnnotationHandlerMapping extends AbstractHandlerMapping{
+    public AnnotationHandlerMapping(ApplicationContext mvcContext)  {
+        super(mvcContext);
     }
 
     @Override
-    public void init() {
+    protected void init(){
+        registryURLAndHandler();//注册map，保存url和handler的对应关系
+        initHandlerInterceptors();
+    }
+
+    private void initHandlerInterceptors() {
+        try {
+            handlerInterceptors = mvcContext.getBeanFactory().getBeansForType(HandlerInterceptor.class);
+            System.out.println(handlerInterceptors.size());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void registryURLAndHandler(){
         AbstractBeanFactory beanFactory = mvcContext.getBeanFactory();
         Map<String, BeanDefinition> map = beanFactory.getBeanDefinitionMap();
         for(Map.Entry<String, BeanDefinition> entry:map.entrySet()){

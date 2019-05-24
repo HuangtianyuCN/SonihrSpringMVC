@@ -2,6 +2,10 @@
 <beans>
     <component-scan base-package="com.sonihrmvc.webappProject.controller"/>
 
+    <!--<bean id="loggerMVCInterceptor" class="com.sonihrmvc.webappProject.controller.LoggerHandlerInterceptor"></bean>-->
+
+    <!--<bean id="transactionMVCInterceptor" class="com.sonihrmvc.webappProject.controller.TransactionHandlerInterceptor"></bean>-->
+
     <!--<bean id="autoProxyCreator" class="com.sonihr.aop.AspectJAwareAdvisorAutoProxyCreator"></bean>-->
 
     <!--<bean id="timeInterceptor" class="com.sonihrmvc.webappProject.controller.TimerInterceptor"></bean>-->

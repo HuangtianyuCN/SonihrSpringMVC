@@ -9,7 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 
-public interface HandlerInterceptor extends MethodInterceptor {
+public interface HandlerInterceptor{
+
+    String[] getPath();//该方法规定被拦截的地址
+
     //该方法在请求处理之前调用，返回true表示交给下一个拦截器，返回false表示到此为止
     boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception;
 

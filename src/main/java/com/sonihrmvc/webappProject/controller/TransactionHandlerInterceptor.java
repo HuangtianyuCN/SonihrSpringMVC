@@ -1,40 +1,35 @@
 package com.sonihrmvc.webappProject.controller;/*
 @author 黄大宁Rhinos
-@date 2019/5/24 - 10:51
+@date 2019/5/24 - 19:28
 **/
 
 import com.sonihr.beans.annotation.Component;
 import com.sonihrmvc.framework.handlerMapping.HandlerInterceptor;
 import com.sonihrmvc.framework.handlerMapping.ModelAndView;
-import net.sf.cglib.proxy.MethodProxy;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.*;
-import java.lang.reflect.Method;
-
 
 @Component
-public class LoggerHandlerInterceptor implements HandlerInterceptor {
+public class TransactionHandlerInterceptor implements HandlerInterceptor {
     @Override
     public String[] getPath() {
         return new String[]{"/mvc/person/"};
     }
 
     @Override
-    public boolean preHandle(HttpServletRequest var1, HttpServletResponse var2, Object var3) throws Exception {
-        System.out.println("logger的preHandle");
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        System.out.println("Transaction的preHandle");
         return true;
     }
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        System.out.println("logger的postHandle");
+        System.out.println("Transaction的postHandle");
     }
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        System.out.println("logger的afterCompletion");
+        System.out.println("Transaction的afterCompletion");
     }
-
 }

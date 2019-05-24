@@ -5,16 +5,14 @@ package com.sonihrmvc.framework.servlet;/*
 
 import com.sonihr.context.ApplicationContext;
 import com.sonihr.context.ClassPathXmlApplicationContext;
-import com.sonihrmvc.framework.handlerMapping.HandlerExecutionChain;
-import com.sonihrmvc.framework.handlerMapping.HandlerMapping;
-import com.sonihrmvc.framework.handlerMapping.AnnotationHandlerMapping;
-import com.sonihrmvc.framework.handlerMapping.RequestMappingHandler;
+import com.sonihrmvc.framework.handlerMapping.*;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 public class DispatcherServlet extends HttpServlet {
     private ApplicationContext mvcContext = null;
@@ -37,10 +35,18 @@ public class DispatcherServlet extends HttpServlet {
     }
 
     private void doDispatch(HttpServletRequest request,HttpServletResponse response) throws Exception {
-        //Todo：
         HandlerExecutionChain handlerExecutionChain =  handlerMapping.getHandler(request);
+        List<HandlerInterceptor> handlerInterceptors = handlerExecutionChain.getInterceptors();
         RequestMappingHandler handler = handlerExecutionChain.getHandler();
-
+        for(int i=0;i<handlerInterceptors.size();i++){
+            HandlerInterceptor interceptor = handlerInterceptors.get(i);
+            if(!interceptor.preHandle(request,response,handler)){
+                for(int j=i-1;j>=0;j--){
+                    handlerInterceptors.get(j).afterCompletion(request,response,handler,new Exception());
+                }
+                break;
+            }
+        }
         //至于如何传参，就是HandlerAdapter的事情了
         handler.getMethod().invoke(handler.getBean(),null);//和AOP不冲突，内部bean如果是代理类，会调用代理后方法,
     }

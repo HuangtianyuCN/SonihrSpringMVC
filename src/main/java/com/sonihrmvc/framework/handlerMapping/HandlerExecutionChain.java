@@ -3,9 +3,11 @@ package com.sonihrmvc.framework.handlerMapping;/*
 @date 2019/5/24 - 10:19
 **/
 
+import java.util.List;
+
 public class HandlerExecutionChain {
     private RequestMappingHandler handler;
-    private HandlerInterceptor[] interceptors;
+    private List<HandlerInterceptor> interceptors;
 
     public RequestMappingHandler getHandler() {
         return handler;
@@ -15,13 +17,11 @@ public class HandlerExecutionChain {
         this.handler = handler;
     }
 
-    public HandlerInterceptor[] getInterceptors() {
+    public List<HandlerInterceptor> getInterceptors() {
         return interceptors;
     }
 
-    public void setInterceptors(HandlerInterceptor[] interceptors) {
+    public void setInterceptors(List<HandlerInterceptor> interceptors) {
         this.interceptors = interceptors;
     }
-
-
 }
