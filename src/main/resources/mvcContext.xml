@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
     <component-scan base-package="com.sonihrmvc.webappProject.controller"/>
+
+    <!--<bean id="autoProxyCreator" class="com.sonihr.aop.AspectJAwareAdvisorAutoProxyCreator"></bean>-->
+
+    <!--<bean id="timeInterceptor" class="com.sonihrmvc.webappProject.controller.TimerInterceptor"></bean>-->
+
+    <!--<bean id="aspectjAspect" class="com.sonihr.aop.AspectJExpressionPointcutAdvisor">-->
+        <!--<property name="advice" ref="timeInterceptor"></property>-->
+        <!--<property name="expression" value= "execution(* com.sonihrmvc.webappProject.controller..*.*(..))"></property>-->
+    <!--</bean>-->
+
 </beans>

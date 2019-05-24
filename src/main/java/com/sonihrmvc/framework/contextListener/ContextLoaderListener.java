@@ -1,11 +1,10 @@
-package com.sonihrmvc.framework.ContextListener;/*
+package com.sonihrmvc.framework.contextListener;/*
 @author 黄大宁Rhinos
 @date 2019/5/23 - 19:17
 **/
 
 import com.sonihr.context.ApplicationContext;
 import com.sonihr.context.ClassPathXmlApplicationContext;
-import com.sonihrmvc.webappProject.service.PersonService;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;

@@ -6,7 +6,7 @@
          id="WebApp_ID" version="2.5">
   <display-name>Archetype Created Web Application</display-name>
   <listener>
-    <listener-class>com.sonihrmvc.framework.ContextListener.ContextLoaderListener</listener-class>
+    <listener-class>com.sonihrmvc.framework.contextListener.ContextLoaderListener</listener-class>
   </listener>
   <context-param>
     <param-name>contextConfigLocation</param-name>

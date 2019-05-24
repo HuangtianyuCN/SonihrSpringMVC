@@ -5,12 +5,24 @@ package com.sonihrmvc.webappProject.controller;/*
 
 import com.sonihr.beans.annotation.Autowired;
 import com.sonihr.beans.annotation.Controller;
+import com.sonihrmvc.framework.annocation.RequestMapping;
 import com.sonihrmvc.webappProject.service.PersonService;
 
 @Controller
+@RequestMapping("/mvc/person/")
 public class PersonController {
     @Autowired
     private PersonService personService;
+
+    @RequestMapping("eat.do")
+    public void eating(){
+        System.out.println("I am eating!");
+    }
+
+    @RequestMapping("speak.do")
+    public void speak(int age){
+        System.out.println("i am " + age + "years old");
+    }
 
     public PersonService getPersonService() {
         return personService;
