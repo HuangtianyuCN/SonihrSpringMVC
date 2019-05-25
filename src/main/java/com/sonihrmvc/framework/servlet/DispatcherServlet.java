@@ -22,7 +22,6 @@ public class DispatcherServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         doInit();
-        handlerMapping = new AnnotationHandlerMapping(mvcContext);
     }
 
     @Override
@@ -37,7 +36,7 @@ public class DispatcherServlet extends HttpServlet {
     private void doDispatch(HttpServletRequest request,HttpServletResponse response) throws Exception {
         HandlerExecutionChain handlerExecutionChain =  handlerMapping.getHandler(request);
         List<HandlerInterceptor> handlerInterceptors = handlerExecutionChain.getInterceptors();
-        RequestMappingHandler handler = handlerExecutionChain.getHandler();
+        Object handler = handlerExecutionChain.getHandler();
         for(int i=0;i<handlerInterceptors.size();i++){
             HandlerInterceptor interceptor = handlerInterceptors.get(i);
             if(!interceptor.preHandle(request,response,handler)){
@@ -48,7 +47,8 @@ public class DispatcherServlet extends HttpServlet {
             }
         }
         //至于如何传参，就是HandlerAdapter的事情了
-        handler.getMethod().invoke(handler.getBean(),null);//和AOP不冲突，内部bean如果是代理类，会调用代理后方法,
+        if(handler instanceof RequestMappingHandler)
+            ((RequestMappingHandler)handler).getMethod().invoke(((RequestMappingHandler)handler).getBean(),null);//和AOP不冲突，内部bean如果是代理类，会调用代理后方法,
     }
 
     private void doInit() throws ServletException {
@@ -60,12 +60,20 @@ public class DispatcherServlet extends HttpServlet {
             mvcXmlPath = mvcXmlPath.substring(10);
         }
         ServletContext servletContext = this.getServletContext();
-
         try {
             ApplicationContext springContext = (ApplicationContext)servletContext.getAttribute("springContext");
             mvcContext = new ClassPathXmlApplicationContext(springContext,mvcXmlPath);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        InitHandlerMapping(mvcContext);
+    }
+
+    private void InitHandlerMapping(ApplicationContext mvcContext){
+        handlerMapping = new AnnotationHandlerMapping(mvcContext);
+        ((AnnotationHandlerMapping) handlerMapping).init();
+        new ControllerHandlerMapping(mvcContext).init();
+        new SimpleUrlHandlerMapping(mvcContext).init();
+        new BeanNameHandlerMapping(mvcContext).init();
     }
 }

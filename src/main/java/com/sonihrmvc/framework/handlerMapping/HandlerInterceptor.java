@@ -3,11 +3,10 @@ package com.sonihrmvc.framework.handlerMapping;/*
 @date 2019/5/24 - 10:21
 **/
 
-import net.sf.cglib.proxy.MethodInterceptor;
+import com.sonihrmvc.framework.modelAndView.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.lang.reflect.Method;
 
 public interface HandlerInterceptor{
 

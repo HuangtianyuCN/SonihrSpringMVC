@@ -20,47 +20,35 @@ public class AnnotationHandlerMapping extends AbstractHandlerMapping{
         super(mvcContext);
     }
 
-    @Override
-    protected void init(){
-        registryURLAndHandler();//注册map，保存url和handler的对应关系
-        initHandlerInterceptors();
-    }
-
-    private void initHandlerInterceptors() {
-        try {
-            handlerInterceptors = mvcContext.getBeanFactory().getBeansForType(HandlerInterceptor.class);
-            System.out.println(handlerInterceptors.size());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void registryURLAndHandler(){
+    protected void registryURLAndHandler() {
         AbstractBeanFactory beanFactory = mvcContext.getBeanFactory();
         Map<String, BeanDefinition> map = beanFactory.getBeanDefinitionMap();
-        for(Map.Entry<String, BeanDefinition> entry:map.entrySet()){
+        for (Map.Entry<String, BeanDefinition> entry : map.entrySet()) {
             String prefix = null;
             String suffix = null;
             Class clazz = entry.getValue().getBeanClass();//通过类名获得前缀
             Object bean = entry.getValue().getBean();
             Annotation annotation = clazz.getAnnotation(RequestMapping.class);
-            if(annotation!=null){
-                prefix = ((RequestMapping)annotation).value();
-            }else{
+            if (annotation != null) {
+                prefix = ((RequestMapping) annotation).value();
+            } else {
                 continue;
             }
             Method[] methods = clazz.getMethods();//通过方法获得后缀
-            for(Method method:methods){
-                annotation =method.getAnnotation(RequestMapping.class);
-                if(annotation!=null){
-                    suffix = ((RequestMapping)annotation).value();
+            for (Method method : methods) {
+                annotation = method.getAnnotation(RequestMapping.class);
+                if (annotation != null) {
+                    suffix = ((RequestMapping) annotation).value();
                     String url = prefix + suffix;
-                    handlerRegistry.put(url,new RequestMappingHandler(bean,method,null));
+                    handlerRegistry.put(url, new RequestMappingHandler(bean, method, null));
                     //System.out.println("url = "+url);
-                }else{
+                } else {
                     continue;
                 }
             }
         }
     }
+
+
+
 }

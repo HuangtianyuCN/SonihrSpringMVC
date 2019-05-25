@@ -6,14 +6,14 @@ package com.sonihrmvc.framework.handlerMapping;/*
 import java.util.List;
 
 public class HandlerExecutionChain {
-    private RequestMappingHandler handler;
+    private Object handler;
     private List<HandlerInterceptor> interceptors;
 
-    public RequestMappingHandler getHandler() {
+    public Object getHandler() {
         return handler;
     }
 
-    public void setHandler(RequestMappingHandler handler) {
+    public void setHandler(Object handler) {
         this.handler = handler;
     }
 

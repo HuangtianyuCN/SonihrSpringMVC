@@ -20,14 +20,12 @@ import java.util.Map;
 
 public abstract class AbstractHandlerMapping implements HandlerMapping {
     protected ApplicationContext mvcContext;
-    protected HashMap<String,RequestMappingHandler> handlerRegistry;
-    List<HandlerInterceptor> handlerInterceptors;
+    protected static HashMap<String,Object> handlerRegistry = new HashMap<>();;
+    protected static List<HandlerInterceptor> handlerInterceptors = new ArrayList<>();
+
 
     public AbstractHandlerMapping(ApplicationContext mvcContext){
         this.mvcContext = mvcContext;
-        this.handlerRegistry = new HashMap<>();
-        this.handlerInterceptors = new ArrayList<>();
-        init();
     }
 
     public ApplicationContext getMvcContext() {
@@ -38,18 +36,18 @@ public abstract class AbstractHandlerMapping implements HandlerMapping {
         this.mvcContext = mvcContext;
     }
 
-    public HashMap<String, RequestMappingHandler> getHandlerRegistry() {
+    public HashMap<String, Object> getHandlerRegistry() {
         return handlerRegistry;
     }
 
-    public void setHandlerRegistry(HashMap<String, RequestMappingHandler> handlerRegistry) {
+    public void setHandlerRegistry(HashMap<String, Object> handlerRegistry) {
         this.handlerRegistry = handlerRegistry;
     }
 
     @Override
     public HandlerExecutionChain getHandler(HttpServletRequest request) throws Exception {
         HandlerExecutionChain handlerExecutionChain = new HandlerExecutionChain();
-        RequestMappingHandler handler = handlerRegistry.get(request.getRequestURI());
+        Object handler = handlerRegistry.get(request.getRequestURI());
         handlerExecutionChain.setHandler(handler);
         List<HandlerInterceptor> interceptors = filterWithUrl(handlerInterceptors,request.getRequestURI());
         handlerExecutionChain.setInterceptors(interceptors);
@@ -74,7 +72,22 @@ public abstract class AbstractHandlerMapping implements HandlerMapping {
         return res;
     }
 
-    protected void init(){ };
+    protected void registryURLAndHandler(){};
+
+    public void init(){
+        registryURLAndHandler();//注册map，保存url和handler的对应关系
+        initHandlerInterceptors();
+    };
+
+    private void initHandlerInterceptors() {
+        try {
+            if(handlerInterceptors.isEmpty())
+                handlerInterceptors = mvcContext.getBeanFactory().getBeansForType(HandlerInterceptor.class);
+            //System.out.println(handlerInterceptors.size());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 
 }

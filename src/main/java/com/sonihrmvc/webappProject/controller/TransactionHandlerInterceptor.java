@@ -5,7 +5,7 @@ package com.sonihrmvc.webappProject.controller;/*
 
 import com.sonihr.beans.annotation.Component;
 import com.sonihrmvc.framework.handlerMapping.HandlerInterceptor;
-import com.sonihrmvc.framework.handlerMapping.ModelAndView;
+import com.sonihrmvc.framework.modelAndView.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
