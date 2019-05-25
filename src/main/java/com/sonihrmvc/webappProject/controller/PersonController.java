@@ -24,6 +24,13 @@ public class PersonController {
         System.out.println("i am " + age + "years old");
     }
 
+    @RequestMapping("baby.do")
+    public void baby(int age,Baby baby,String name){
+        System.out.println(age);
+        System.out.println(baby);
+        System.out.println(name);
+    }
+
     public PersonService getPersonService() {
         return personService;
     }
