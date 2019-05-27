@@ -11,6 +11,16 @@ public class Baby {
     private int babtAge;
     private float weight;
 
+
+    public Baby() {
+    }
+
+    public Baby(String babyName, int babtAge, float weight) {
+        this.babyName = babyName;
+        this.babtAge = babtAge;
+        this.weight = weight;
+    }
+
     public String getBabyName() {
         return babyName;
     }

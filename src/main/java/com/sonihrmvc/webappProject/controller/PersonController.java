@@ -6,6 +6,7 @@ package com.sonihrmvc.webappProject.controller;/*
 import com.sonihr.beans.annotation.Autowired;
 import com.sonihr.beans.annotation.Controller;
 import com.sonihrmvc.framework.annocation.RequestMapping;
+import com.sonihrmvc.framework.annocation.ResponseBody;
 import com.sonihrmvc.framework.modelAndView.Model;
 import com.sonihrmvc.webappProject.service.PersonService;
 
@@ -33,8 +34,13 @@ public class PersonController {
     }
     @RequestMapping("redirect.do")
     public String redirect(){
-
         return "redirect:/mvc/notice/error.jsp";
+    }
+
+    @ResponseBody
+    @RequestMapping("json.do")
+    public Baby json(){
+        return new Baby("json",1,7.6f);
     }
 
     @RequestMapping("baby.do")

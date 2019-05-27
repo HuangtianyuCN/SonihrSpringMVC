@@ -4,7 +4,9 @@ package com.sonihrmvc.framework.handlerAdapter;/*
 **/
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.sonihr.context.ApplicationContext;
+import com.sonihrmvc.framework.annocation.ResponseBody;
 import com.sonihrmvc.framework.handlerMapping.RequestMappingHandler;
 import com.sonihrmvc.framework.modelAndView.Model;
 import com.sonihrmvc.framework.modelAndView.ModelAndView;
@@ -12,6 +14,7 @@ import com.sonihrmvc.framework.view.View;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.lang.annotation.Annotation;
 
 public class AnnotationHandlerAdapter extends AbstractHandlerAdapter {
     public AnnotationHandlerAdapter(ApplicationContext mvcContext) {
@@ -33,6 +36,12 @@ public class AnnotationHandlerAdapter extends AbstractHandlerAdapter {
         Object obj = rmHandler.getMethod().invoke(rmHandler.getBean(),args);
         if(obj==null)
             return null;
+        //@ResponseBody
+        Annotation annotation = rmHandler.getMethod().getAnnotation(ResponseBody.class);
+        if(annotation!=null){
+            response.getWriter().write(JSONObject.toJSONString(obj));
+            return null;
+        }
         if(obj instanceof ModelAndView)
             return (ModelAndView)obj;
         ModelAndView mv = new ModelAndView();
@@ -40,6 +49,7 @@ public class AnnotationHandlerAdapter extends AbstractHandlerAdapter {
             mv.setModel(model);
             mv.setView((String) obj);
         }
+
         return mv;
     }
 
