@@ -5,6 +5,8 @@ package com.sonihrmvc.framework.handlerAdapter;/*
 
 import com.sonihr.beans.converter.ConverterFactory;
 import com.sonihrmvc.framework.handlerMapping.RequestMappingHandler;
+import com.sonihrmvc.framework.modelAndView.Model;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.apache.commons.beanutils.BeanUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class ArgumentResolverUtil {
-    public static Object[] resloveRequsetParam(HttpServletRequest request, Method method) throws Exception {
+    public static Object[] resloveRequsetParam(HttpServletRequest request, Method method,Model model) throws Exception {
         Map<String,String[]> paramMap = request.getParameterMap();
         Map<String,String> argMap = new LinkedHashMap<>();
         for(Map.Entry<String,String[]> entry:paramMap.entrySet()){
@@ -35,6 +37,11 @@ public class ArgumentResolverUtil {
         Object[] args = new Object[parameters.length];
         for(int i=0;i<parameters.length;i++){
             Parameter parameter = parameters[i];
+            //如果形参中有Model类，则创建一个参数
+            if(parameter.getType() == Model.class){
+                args[i] = model;
+                continue;
+            }
             if(argMap.containsKey(parameter.getName())){
                 String value = argMap.get(parameter.getName());
                 Type type = parameter.getType();

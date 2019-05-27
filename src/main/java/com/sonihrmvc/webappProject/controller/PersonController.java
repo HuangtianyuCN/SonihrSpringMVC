@@ -6,6 +6,7 @@ package com.sonihrmvc.webappProject.controller;/*
 import com.sonihr.beans.annotation.Autowired;
 import com.sonihr.beans.annotation.Controller;
 import com.sonihrmvc.framework.annocation.RequestMapping;
+import com.sonihrmvc.framework.modelAndView.Model;
 import com.sonihrmvc.webappProject.service.PersonService;
 
 @Controller
@@ -22,6 +23,18 @@ public class PersonController {
     @RequestMapping("speak.do")
     public void speak(int age){
         System.out.println("i am " + age + "years old");
+    }
+
+    @RequestMapping("sleep.do")
+    public String sleep(int time, Model model){
+        System.out.println("i sleep " + time + " hours");
+        model.put("time",time);
+        return "success";
+    }
+    @RequestMapping("redirect.do")
+    public String redirect(){
+
+        return "redirect:/mvc/notice/error.jsp";
     }
 
     @RequestMapping("baby.do")

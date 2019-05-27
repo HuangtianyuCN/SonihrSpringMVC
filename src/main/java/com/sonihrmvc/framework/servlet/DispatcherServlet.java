@@ -10,6 +10,9 @@ import com.sonihrmvc.framework.handlerAdapter.ControllerHanlderAdapter;
 import com.sonihrmvc.framework.handlerAdapter.HandlerAdapter;
 import com.sonihrmvc.framework.handlerMapping.*;
 import com.sonihrmvc.framework.modelAndView.ModelAndView;
+import com.sonihrmvc.framework.view.View;
+import com.sonihrmvc.framework.viewresolver.InternalResourceViewResolver;
+import com.sonihrmvc.framework.viewresolver.ViewResolver;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -23,11 +26,16 @@ public class DispatcherServlet extends HttpServlet {
     private ApplicationContext mvcContext = null;
     private HandlerMapping handlerMapping = null;
     private List<HandlerAdapter> handlerAdapters = null;
+    private ViewResolver resolver = null;
 
 
     @Override
-    public void init() throws ServletException {
-        doInit();
+    public void init() {
+        try {
+            doInit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -45,9 +53,12 @@ public class DispatcherServlet extends HttpServlet {
         Object handler = handlerExecutionChain.getHandler();//获取handler
         List<HandlerInterceptor> handlerInterceptors = handlerExecutionChain.getInterceptors();//获取拦截器链
         doInterceptorsPreHandle(request,response,handlerInterceptors,handler);//进行前置处理
-        ModelAndView modelAndView = doHandlerAdapter(request,response,handler);//进入HandlerAdaper模块
-        doInterceptorsPostHandle(request,response,handlerInterceptors,handler,modelAndView);//进行POST处理
-        //todo:页面渲染
+        ModelAndView mv = doHandlerAdapter(request,response,handler);//进入HandlerAdaper模块
+        doInterceptorsPostHandle(request,response,handlerInterceptors,handler,mv);//进行POST处理
+        //视图解析器解析mv
+        View view = resolver.resolveViewName(mv.getView());
+        //页面渲染
+        view.render(mv.getModel(),request,response);
         doInterceptorsAfterCompletion(request,response,handlerInterceptors,handler,new Exception());
     }
 
@@ -95,7 +106,7 @@ public class DispatcherServlet extends HttpServlet {
         }
     }
 
-    private void doInit() throws ServletException {
+    private void doInit() throws Exception {
         super.init();
         String mvcXmlPath = this.getInitParameter("contextConfigLocation");
         if(mvcXmlPath==null||mvcXmlPath.length()==0)
@@ -112,6 +123,15 @@ public class DispatcherServlet extends HttpServlet {
         }
         InitHandlerMappings(mvcContext);
         InitHandlerAdapters(mvcContext);
+        InitViewResolver(mvcContext);
+    }
+
+    private void InitViewResolver(ApplicationContext mvcContext) throws Exception {
+        List<ViewResolver> resolvers = mvcContext.getBeanFactory().getBeansForType(ViewResolver.class);
+        if(resolvers.size()!=1){
+            throw new Exception("未配置视图解析器或配置多个");
+        }
+        this.resolver = resolvers.get(0);
     }
 
     private void InitHandlerAdapters(ApplicationContext mvcContext){

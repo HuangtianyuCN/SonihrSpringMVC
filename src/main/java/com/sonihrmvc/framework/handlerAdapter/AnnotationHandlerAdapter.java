@@ -6,7 +6,9 @@ package com.sonihrmvc.framework.handlerAdapter;/*
 
 import com.sonihr.context.ApplicationContext;
 import com.sonihrmvc.framework.handlerMapping.RequestMappingHandler;
+import com.sonihrmvc.framework.modelAndView.Model;
 import com.sonihrmvc.framework.modelAndView.ModelAndView;
+import com.sonihrmvc.framework.view.View;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,9 +28,17 @@ public class AnnotationHandlerAdapter extends AbstractHandlerAdapter {
     @Override
     public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         RequestMappingHandler rmHandler = (RequestMappingHandler)handler;
-        Object[] args = ArgumentResolverUtil.resloveRequsetParam(request,rmHandler.getMethod());
+        Model model = new Model();
+        Object[] args = ArgumentResolverUtil.resloveRequsetParam(request,rmHandler.getMethod(),model);
         Object obj = rmHandler.getMethod().invoke(rmHandler.getBean(),args);
-        return new ModelAndView(obj);
+        if(obj instanceof ModelAndView)
+            return (ModelAndView)obj;
+        ModelAndView mv = new ModelAndView();
+        if(obj instanceof String){
+            mv.setModel(model);
+            mv.setView((String) obj);
+        }
+        return mv;
     }
 
 }

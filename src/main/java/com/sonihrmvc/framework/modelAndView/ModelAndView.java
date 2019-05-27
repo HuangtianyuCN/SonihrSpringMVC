@@ -3,18 +3,33 @@ package com.sonihrmvc.framework.modelAndView;/*
 @date 2019/5/24 - 11:14
 **/
 
+import com.sonihrmvc.framework.view.View;
+
 public class ModelAndView {
-    Object bean;
+    private Model model;
+    private String view;
 
-    public ModelAndView(Object bean) {
-        this.bean = bean;
+    public ModelAndView() {
     }
 
-    public Object getBean() {
-        return bean;
+    public ModelAndView(Model model, String view) {
+        this.model = model;
+        this.view = view;
     }
 
-    public void setBean(Object bean) {
-        this.bean = bean;
+    public Model getModel() {
+        return model;
+    }
+
+    public void setModel(Model model) {
+        this.model = model;
+    }
+
+    public String getView() {
+        return view;
+    }
+
+    public void setView(String view) {
+        this.view = view;
     }
 }
