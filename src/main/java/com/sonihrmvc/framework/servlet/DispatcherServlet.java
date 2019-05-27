@@ -55,10 +55,10 @@ public class DispatcherServlet extends HttpServlet {
         doInterceptorsPreHandle(request,response,handlerInterceptors,handler);//进行前置处理
         ModelAndView mv = doHandlerAdapter(request,response,handler);//进入HandlerAdaper模块
         doInterceptorsPostHandle(request,response,handlerInterceptors,handler,mv);//进行POST处理
-        //视图解析器解析mv
-        View view = resolver.resolveViewName(mv.getView());
-        //页面渲染
-        view.render(mv.getModel(),request,response);
+        if(mv!=null){
+            View view = resolver.resolveViewName(mv.getView());//解析viewName
+            view.render(mv.getModel(),request,response);//渲染视图
+        }
         doInterceptorsAfterCompletion(request,response,handlerInterceptors,handler,new Exception());
     }
 

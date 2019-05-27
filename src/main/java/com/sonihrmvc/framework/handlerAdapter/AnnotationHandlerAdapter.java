@@ -31,6 +31,8 @@ public class AnnotationHandlerAdapter extends AbstractHandlerAdapter {
         Model model = new Model();
         Object[] args = ArgumentResolverUtil.resloveRequsetParam(request,rmHandler.getMethod(),model);
         Object obj = rmHandler.getMethod().invoke(rmHandler.getBean(),args);
+        if(obj==null)
+            return null;
         if(obj instanceof ModelAndView)
             return (ModelAndView)obj;
         ModelAndView mv = new ModelAndView();
